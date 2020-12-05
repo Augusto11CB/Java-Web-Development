@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Chat</title>
+</head>
+<body>
+<form action="#" th:action="@{'/chat'}" th:object="${chatForm}" method="POST">
+    <label for="username">Username:</label>
+    <input id="username" type="text" name="userName" th:field="*{userName}">
+    <label for="messageText">Message Text:</label>
+    <input id="messageText" type="text" name="message" th:field="*{message}">
+    <label for="messageType">Message Type: </label>
+    <select id="messageType" th:field="*{messageType}">
+        <option th:each="type : ${allMessageTypes}"
+                th:value="${type}"
+                th:text="${type}"> Say
+        </option>
+    </select>
+    <input type="submit">
+</form>
+
+<!--<div th:each="chatMessage : ${chatMessages}">
+    <span th:text="${chatMessage.userName}">Username</span>: <span th:text="${chatMessage.message}">No Messages</span>
+</div>-->
+
+<div th:each="chatMessage : ${chatMessages}">
+    <div>
+        <!-- th:with : creates a local variable -->
+        <span th:with="messageWords=${#strings.listSplit(chatMessage.message,' ')}" th:text="${messageWords}"></span>
+        <!-- th:block is a mere attribute container that allows template developers to specify whichever attributes they want. Thymeleaf will execute these attributes and then simply make the block, but not its contents, disappear. -->
+        <th:block th:switch="${chatMessage.messageType}">
+            <div th:case="'Say'">
+                <span th:text="${chatMessage.userName}">Username</span>: <span th:text="${chatMessage.message}">No Messages</span>
+            </div>
+            <div th:case="'Shout'">
+                <span th:text="${chatMessage.userName}">Username</span>: <b><span th:text="${chatMessage.message}">No Messages</span></b>
+            </div>
+            <div th:case="'Whisper'">
+                <span th:text="${chatMessage.userName}">Username</span>: <i><span th:text="${chatMessage.message}">No Messages</span></i>
+            </div>
+        </th:block>
+    </div>
+</div>
+</body>
