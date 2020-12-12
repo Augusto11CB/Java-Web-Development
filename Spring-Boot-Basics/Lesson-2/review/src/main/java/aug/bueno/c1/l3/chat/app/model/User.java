@@ -7,10 +7,12 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ChatMessage {
+public class User {
 
-    private String messageid;
+    private int userid;
     private String username;
-    private String messagetext;
-    private String messagetype;
+    private String salt;
+    private String password;
+    private String firstname;
+    private String lastname;
 }

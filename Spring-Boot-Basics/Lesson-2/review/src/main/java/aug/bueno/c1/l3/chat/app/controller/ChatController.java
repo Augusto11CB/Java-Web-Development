@@ -3,11 +3,18 @@ package aug.bueno.c1.l3.chat.app.controller;
 import aug.bueno.c1.l3.chat.app.model.ChatForm;
 import aug.bueno.c1.l3.chat.app.model.ChatMessage;
 import aug.bueno.c1.l3.chat.app.service.MessageService;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import java.security.Principal;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class ChatController {
@@ -20,21 +27,20 @@ public class ChatController {
 
     @GetMapping("/chat")
     public String getChatPage(
-            @ModelAttribute("chatMessage") ChatMessage chatMessage,
-            @ModelAttribute("chatForm") ChatForm chatForm,
-            Model model
-
+            final @ModelAttribute("chatMessage") ChatMessage chatMessage,
+            final @ModelAttribute("chatForm") ChatForm chatForm,
+            final Model model
     ) {
         /*
-         * 1 - Update selection element template TODO[]
+         * 1 - Update selection element template
+
          * <select th:field="*{percentage}">
          *   <option th:each="i : ${#numbers.sequence(0, 100)}" th:value="${i}" th:text="${i}">
          *   </option>
          * </select>
-         *
          * */
 
-        // 2 - Insert fo
+        // 2 - Insert to
         // model.addAttribute("listOfForbiddenWords", this.messageService.getForbiddenMessages());
 
         return "chat";
@@ -42,17 +48,25 @@ public class ChatController {
 
     @PostMapping("/chat")
     public String sendMessageInChat(
-            @ModelAttribute("chatForm") ChatForm chatForm,
-            Model model
-
+            final @ModelAttribute("chatForm") ChatForm chatForm,
+            final Model model,
+            final Principal principal,
+            final Authentication authentication
     ) {
+        chatForm.setUserName(principal.getName());
         messageService.addMessage(chatForm);
-
         chatForm.setMessage("");
 
-        model.addAttribute("chatMessages", this.messageService.getAllMessages());
-
+        model.addAttribute("chatMessages", this.reloadMessages());
         return "chat";
+    }
+
+    private List<ChatForm> reloadMessages() {
+        List<ChatMessage> allMessages = this.messageService.getAllMessages();
+
+        return allMessages.stream()
+                .map(chatMessage -> new ChatForm(chatMessage.getUsername(), chatMessage.getMessagetext(), chatMessage.getMessagetype()))
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     @ModelAttribute("allMessageTypes")

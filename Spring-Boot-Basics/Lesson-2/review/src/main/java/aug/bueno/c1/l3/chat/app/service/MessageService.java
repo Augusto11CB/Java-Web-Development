@@ -2,44 +2,46 @@ package aug.bueno.c1.l3.chat.app.service;
 
 import aug.bueno.c1.l3.chat.app.model.ChatForm;
 import aug.bueno.c1.l3.chat.app.model.ChatMessage;
+import aug.bueno.c1.l3.chat.app.repository.mapper.ChatMessageMapper;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 @Service
 public class MessageService {
 
-    private List<ChatMessage> messages;
+    private ChatMessageMapper chatMessageMapper;
+
+    public MessageService(ChatMessageMapper chatMessageMapper) {
+        this.chatMessageMapper = chatMessageMapper;
+    }
 
     public void addMessage(final ChatForm chatForm) {
 
-        ChatMessage newMessage = new ChatMessage();
-        newMessage.setUserName(chatForm.getUserName());
-        newMessage.setMessageType(chatForm.getMessageType());
+        final ChatMessage newMessage = new ChatMessage();
+        newMessage.setUsername(chatForm.getUserName());
+        newMessage.setMessagetype(chatForm.getMessageType());
 
         switch (chatForm.getMessageType()) {
             case "Say":
-                newMessage.setMessage(chatForm.getMessage());
+                newMessage.setMessagetext(chatForm.getMessage());
                 break;
             case "Shout":
-                newMessage.setMessage(chatForm.getMessage().toUpperCase());
+                newMessage.setMessagetext(chatForm.getMessage().toUpperCase());
                 break;
             case "Whisper":
-                newMessage.setMessage(chatForm.getMessage().toLowerCase());
+                newMessage.setMessagetext(chatForm.getMessage().toLowerCase());
                 break;
         }
 
-        if (!filterForbiddenWorld(newMessage.getMessage(), this.forbiddenWords())) {
-            this.messages.add(newMessage);
+        if (!filterForbiddenWorld(newMessage.getMessagetext(), this.forbiddenWords())) {
+            this.chatMessageMapper.insert(newMessage);
         }
     }
 
-
     public List<ChatMessage> getAllMessages() {
-        return messages;
+        return this.chatMessageMapper.getAllChatMessages();
     }
 
     private boolean filterForbiddenWorld(String inputStr, List<String> items) {
@@ -51,9 +53,9 @@ public class MessageService {
         return Arrays.asList("Hi", "Hello", "Hey", "Thank");
     }
 
-    @PostConstruct
-    private void initiateMessageServiceAttributes() {
-        messages = new ArrayList<>();
-    }
+//    @PostConstruct
+//    private void initiateMessageServiceAttributes() {
+//        messages = new ArrayList<>();
+//    }
 
 }
