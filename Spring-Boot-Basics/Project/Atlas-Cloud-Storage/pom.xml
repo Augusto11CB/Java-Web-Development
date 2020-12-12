@@ -5,17 +5,18 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.2.4.RELEASE</version>
+        <version>2.4.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.udacity.jwdnd.course1</groupId>
-    <artifactId>cloudstorage</artifactId>
+    <!--    <groupId>com.udacity.jwdnd.course1</groupId>-->
+    <groupId>aug.bueno</groupId>
+    <artifactId>atlascloudstorage</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>cloudstorage</name>
+    <name>atlascloudstorage</name>
     <description>Final Project for Udacity's Spring Boot Basics course.</description>
 
     <properties>
-        <java.version>11</java.version>
+        <java.version>15</java.version>
     </properties>
 
     <dependencies>
@@ -49,6 +50,16 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!--##### Start - Lombok ##### -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.16</version>
+            <scope>provided</scope>
+        </dependency>
+        <!--##### End - Lombok ##### -->
+
+        <!--##### Test #####-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -83,13 +94,13 @@
             <version>3.141.59</version>
             <scope>test</scope>
         </dependency>
-		<dependency>
-			<groupId>io.github.bonigarcia</groupId>
-			<artifactId>webdrivermanager</artifactId>
-			<version>3.8.1</version>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>io.github.bonigarcia</groupId>
+            <artifactId>webdrivermanager</artifactId>
+            <version>3.8.1</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>
