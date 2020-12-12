@@ -1,4 +1,4 @@
-package com.udacity.jwdnd.course1.cloudstorage;
+package aug.bueno.cloudstorage;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
