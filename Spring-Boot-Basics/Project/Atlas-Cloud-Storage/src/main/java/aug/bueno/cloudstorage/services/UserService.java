@@ -40,4 +40,8 @@ public class UserService {
         }
     }
 
+    public Optional<User> findUserByUserName(final String userName){
+        return userMapper.getUserByName(userName);
+    }
+
 }

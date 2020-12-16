@@ -1,4 +1,4 @@
-package aug.bueno.cloudstorage.model;
+package aug.bueno.cloudstorage.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,11 +9,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Note {
+public class NoteFormDTO {
 
-    private int noteID;
+    private Integer noteID;
     private String noteTitle;
     private String noteDescription;
-    private int userID;
-
+    private Integer userID;
 }

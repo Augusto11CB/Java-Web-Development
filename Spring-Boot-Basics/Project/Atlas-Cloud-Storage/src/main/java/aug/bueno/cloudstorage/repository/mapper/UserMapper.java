@@ -3,14 +3,16 @@ package aug.bueno.cloudstorage.repository.mapper;
 import aug.bueno.cloudstorage.model.User;
 import org.apache.ibatis.annotations.*;
 
+import java.util.Optional;
+
 @Mapper
 public interface UserMapper {
 
     @Select("SELECT * FROM USERS WHERE userid = #{userid}")
-    User getUserById(int userid);
+    Optional<User> getUserById(int userid);
 
     @Select("SELECT * FROM USERS WHERE username = #{username}")
-    User getUserByName(String username);
+    Optional<User> getUserByName(String username);
 
     @Insert("INSERT INTO USERS (username, salt, password, firstname, lastname) " +
             "VALUES(#{username}, #{salt}, #{password}, #{firstname}, #{lastname})")
