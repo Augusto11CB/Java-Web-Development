@@ -1,6 +1,9 @@
 package aug.bueno.cloudstorage.controller;
 
+import aug.bueno.cloudstorage.dto.CredentialFormDTO;
 import aug.bueno.cloudstorage.dto.NoteFormDTO;
+import aug.bueno.cloudstorage.services.CredentialService;
+import aug.bueno.cloudstorage.services.EncryptionService;
 import aug.bueno.cloudstorage.services.NoteService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,13 +27,21 @@ import java.util.stream.Collectors;
 public class HomeController {
 
     private NoteService noteService;
+    private CredentialService credentialService;
+    private EncryptionService encryptionService;
 
-    public HomeController(NoteService noteService) {
+    public HomeController(NoteService noteService, CredentialService credentialService, EncryptionService encryptionService) {
         this.noteService = noteService;
+        this.credentialService = credentialService;
+        this.encryptionService = encryptionService;
     }
 
     @GetMapping
-    public String getHomePage(final Model model, @ModelAttribute("noteForm") NoteFormDTO noteFormDTO) {
+    public String getHomePage(
+            final Model model,
+            @ModelAttribute("noteForm") NoteFormDTO noteFormDTO ,
+            @ModelAttribute("credentialForm") CredentialFormDTO credentialFormDTO
+    ) {
         List<NoteFormDTO> noteFormDTOS = noteService.findAllNotesUser(1).stream().map(note -> {
             return NoteFormDTO.builder()
                     .noteDescription(note.getNoteDescription())
@@ -40,7 +51,11 @@ public class HomeController {
                     .build();
         }).collect(Collectors.toList());
 
+        List<CredentialFormDTO> credentialFormDTOS = credentialService.findAllNotesUser(1);
+
         model.addAttribute("notes", noteFormDTOS);
+        model.addAttribute("credentials", credentialFormDTOS);
+        model.addAttribute("encryptionService", encryptionService);
 
         return "home";
     }

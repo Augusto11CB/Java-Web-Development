@@ -13,8 +13,6 @@ public class NoteService {
 
     private NoteMapper noteMapper;
 
-    private List<Note> tempNote;
-
     public NoteService(NoteMapper noteMapper) {
         this.noteMapper = noteMapper;
     }
@@ -38,6 +36,7 @@ public class NoteService {
                 .noteDescription(noteFormDTO.getNoteDescription())
                 .noteTitle(noteFormDTO.getNoteTitle())
                 .userID(userID);
+
         if (noteFormDTO.getNoteID() == null || noteFormDTO.getNoteID().toString().equals("") || noteFormDTO.getNoteID() <= 0) {
             return this.noteMapper.insert(noteBuilder.build()) > 0;
         } else {

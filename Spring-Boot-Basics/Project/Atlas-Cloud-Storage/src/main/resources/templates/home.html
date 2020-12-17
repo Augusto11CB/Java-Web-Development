@@ -163,21 +163,20 @@
                             <th style="width: 25%" scope="col">Password</th>
                         </tr>
                         </thead>
-                        <!--                        <tbody th:remove="all-but-first">-->
-                        <tbody>
-                        <!--                        <tr th:each="credential : ${credentials}">-->
-                        <tr>
+                        <tbody th:remove="all-but-first">
+                        <tr th:each="credential : ${credentials}">
                             <td>
-                                <!--TODO This button does not have any action-->
-                                <button type="button" class="btn btn-success">Edit</button>
-                                <a class="btn btn-danger">Delete</a>
+                                <button type="button" class="btn btn-success"
+                                        th:data-decryptedPassword="${encryptionService.decryptValue(credential.password, credential.key)}"
+                                        th:onclick="showCredentialModal([[${credential}]], this.getAttribute('data-decryptedPassword'))"> Edit
+                                </button>
+
+                                <a name="delete" th:href="@{/credential/delete(id=${credential.credentialID})}"
+                                   class="btn btn-danger">Delete</a>
                             </td>
-                            <!--                            <th th:text="${credential.url}" scope="row">Example Credential URL</th>-->
-                            <th scope="row">Example Credential URL</th>
-                            <!--                            <td th:text="${credential.userName}">Example Credential Username</td>-->
-                            <td>Example Credential Username</td>
-                            <!--                            <td th:text="${credential.password}">Example Credential Password</td>-->
-                            <td>Example Credential Password</td>
+                            <th th:text="${credential.url}" scope="row">Example Credential URL</th>
+                            <td th:text="${credential.userName}">Example Credential Username</td>
+                            <td th:text="${credential.password}">Example Credential Password</td>
                         </tr>
                         </tbody>
                     </table>
@@ -194,25 +193,26 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <!--                                <form action="#" th:action="@{/home/credential-upload}" th:object="${credentialForm}" method="POST">-->
-                                <form action="#" method="POST">
-                                    <input type="hidden" name="credentialId" id="credential-id">
+                                <form action="#" th:action="@{/credential/}" th:object="${credentialForm}"
+                                      method="POST">
+                                    <input type="hidden" name="credentialId" th:field="*{credentialID}"
+                                           id="credential-id">
                                     <div class="form-group">
                                         <label for="note-title" class="col-form-label">URL</label>
-                                        <!--                                        <input type="text" name="url" class="form-control" th:field="*{url}" id="credential-url"-->
-                                        <input type="text" name="url" class="form-control" id="credential-url"
+                                        <input type="text" name="url" class="form-control" th:field="*{url}"
+                                               id="credential-url"
                                                maxlength="100" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="note-title" class="col-form-label">Username</label>
-                                        <!--                                        <input type="text" name="username" class="form-control" th:field="*{userName}" id="credential-username"-->
-                                        <input type="text" name="username" class="form-control" id="credential-username"
+                                        <input type="text" name="username" class="form-control" th:field="*{userName}"
+                                               id="credential-username"
                                                maxlength="30" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="note-title" class="col-form-label">Password</label>
-                                        <!--                                        <input type="text" name="password" class="form-control" th:field="*{password}" id="credential-password"-->
-                                        <input type="text" name="password" class="form-control" id="credential-password"
+                                        <input type="text" name="password" class="form-control" th:field="*{password}"
+                                               id="credential-password"
                                                maxlength="30" required>
                                     </div>
                                     <button id="credentialSubmit" type="submit" class="d-none"></button>
@@ -237,27 +237,33 @@
 <script th:src="@{/js/popper.min.js}"></script>
 <script th:src="@{/js/bootstrap.min.js}"></script>
 
-<!--For opening the note modal-->
-<script type="text/javascript">
 
-            // For opening the note modal
+<!--<script type="text/javascript">-->
+<script th:inline="javascript">
+
+           // For opening the note modal
             function showNoteModal(note) {
+
                 $('#note-id').val(note && note.noteID ? note.noteID : 0);
                 $('#note-title').val(note && note.noteTitle ? note.noteTitle : '');
                 $('#note-description').val(note && note.noteDescription ? note.noteDescription : '');
                 $('#noteModal').modal('show');
             }
 
-            // For opening the credentials modal
-            function showCredentialModal(credential) {
-                $('#credential-id').val(credential && credential.credentialId ? credential.credentialId : '');
+            function showCredentialModal(credential, encryptedPassword) {
+
+                $('#credential-id').val(credential && credential.credentialID ? credential.credentialID : '');
                 $('#credential-url').val(credential && credential.url ? credential.url : '');
                 $('#credential-username').val(credential && credential.userName ? credential.userName : '');
-                $('#credential-password').val(credential && credential.password ? credential.password : '');
+
+                if(encryptedPassword){
+                    $('#credential-password').val(encryptedPassword ? encryptedPassword : '');
+                } else {
+                    $('#credential-password').val(credential && credential.password ? credential.password : '');
+                }
+
                 $('#credentialModal').modal('show');
             }
-
-
 
 </script>
 </body>

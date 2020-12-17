@@ -1,4 +1,4 @@
-package aug.bueno.cloudstorage.model;
+package aug.bueno.cloudstorage.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class Credential {
+@AllArgsConstructor
+public class CredentialFormDTO {
 
     private Integer credentialID;
     private String url;
@@ -17,5 +17,4 @@ public class Credential {
     private String key;
     private String password;
     private int userID;
-
 }

@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.*;
 /**
  * Note
  * <p>
- * - Creation: On successful note creation, the user should be shown a success message and the created note should appear in the list.
+ * - [X] Creation: On successful note creation, the user should be shown a success message and the created note should appear in the list.
  * <p>
- * - Deletion: On successful note deletion, the user should be shown a success message and the deleted note should disappear from the list.
+ * - [X] Deletion: On successful note deletion, the user should be shown a success message and the deleted note should disappear from the list.
  * <p>
- * - Edit/Update: When a user selects edit, they should be shown a view with the note's current title and text. On successful note update, the user should be shown a success message and the updated note should appear from the list.
+ * - [X] Edit/Update: When a user selects edit, they should be shown a view with the note's current title and text. On successful note update, the user should be shown a success message and the updated note should appear from the list.
  * <p>
- * - Errors: Users should be notified of errors if they occur.
+ * - [X] Errors: Users should be notified of errors if they occur.
  */
 
 @Controller
@@ -39,7 +39,7 @@ public class NoteController {
         LOGGER.info(noteForm.toString());
 
         boolean result = noteService.insertOrUpdateNote(noteForm, 1);
-        return "redirect:/result?isSuccess=" + result;
+        return result ? "redirect:/result?isSuccess=" + true : "redirect:/result?error=" + true;
     }
 
     @GetMapping("/delete")
@@ -55,11 +55,10 @@ public class NoteController {
         try {
 
             if (noteID > 0) {
-
                 result = noteService.deleteByNoteID(noteID);
-                return "redirect:/result?isSuccess=" + result;
             }
-            return "redirect:/result?error=" + true;
+
+            return result ? "redirect:/result?isSuccess=" + true : "redirect:/result?error=" + true;
 
         } catch (Exception e) {
             this.LOGGER.error(e.getMessage());
