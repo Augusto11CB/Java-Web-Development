@@ -5,8 +5,6 @@ import aug.bueno.cloudstorage.model.Note;
 import aug.bueno.cloudstorage.repository.mapper.NoteMapper;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,17 +32,17 @@ public class NoteService {
                 .collect(Collectors.toList());
     }
 
-    public void insertOrUpdateNote(final NoteFormDTO noteFormDTO, final int userID) {
+    public boolean insertOrUpdateNote(final NoteFormDTO noteFormDTO, final int userID) {
 
         final Note.NoteBuilder noteBuilder = Note.builder()
                 .noteDescription(noteFormDTO.getNoteDescription())
                 .noteTitle(noteFormDTO.getNoteTitle())
                 .userID(userID);
         if (noteFormDTO.getNoteID() == null || noteFormDTO.getNoteID().toString().equals("") || noteFormDTO.getNoteID() <= 0) {
-            this.noteMapper.insert(noteBuilder.build());
+            return this.noteMapper.insert(noteBuilder.build()) > 0;
         } else {
             noteBuilder.noteID(noteFormDTO.getNoteID());
-            this.noteMapper.update(noteBuilder.build());
+            return this.noteMapper.update(noteBuilder.build()) > 0;
         }
     }
 
@@ -54,8 +52,7 @@ public class NoteService {
     }
 
     public boolean deleteByNoteID(final int noteID) {
-        noteMapper.delete(noteID);
-        return true;
+        return noteMapper.delete(noteID);
     }
 
     private NoteFormDTO noteToNoteFormDTO(final Note note) {
@@ -67,14 +64,4 @@ public class NoteService {
                 .build();
     }
 
-    @PostConstruct
-    private void createTestData() {
-
-        this.tempNote = new ArrayList<>();
-
-        tempNote.add(new Note(1, "1", "desc1", 1));
-        tempNote.add(new Note(2, "2", "desc2", 1));
-        tempNote.add(new Note(3, "3", "desc3", 1));
-        tempNote.add(new Note(4, "4", "desc4", 2));
-    }
 }
