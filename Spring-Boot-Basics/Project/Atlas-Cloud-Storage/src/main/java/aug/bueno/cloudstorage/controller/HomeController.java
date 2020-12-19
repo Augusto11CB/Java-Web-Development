@@ -1,9 +1,11 @@
 package aug.bueno.cloudstorage.controller;
 
 import aug.bueno.cloudstorage.dto.CredentialFormDTO;
+import aug.bueno.cloudstorage.dto.FileFormDTO;
 import aug.bueno.cloudstorage.dto.NoteFormDTO;
 import aug.bueno.cloudstorage.services.CredentialService;
 import aug.bueno.cloudstorage.services.EncryptionService;
+import aug.bueno.cloudstorage.services.FileService;
 import aug.bueno.cloudstorage.services.NoteService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,33 +30,33 @@ public class HomeController {
 
     private NoteService noteService;
     private CredentialService credentialService;
+    private FileService fileService;
     private EncryptionService encryptionService;
 
-    public HomeController(NoteService noteService, CredentialService credentialService, EncryptionService encryptionService) {
+    public HomeController(NoteService noteService, CredentialService credentialService, FileService fileService,
+                          EncryptionService encryptionService) {
         this.noteService = noteService;
         this.credentialService = credentialService;
+        this.fileService = fileService;
         this.encryptionService = encryptionService;
     }
 
     @GetMapping
     public String getHomePage(
             final Model model,
-            @ModelAttribute("noteForm") NoteFormDTO noteFormDTO ,
-            @ModelAttribute("credentialForm") CredentialFormDTO credentialFormDTO
+            @ModelAttribute("noteForm") NoteFormDTO noteFormDTO,
+            @ModelAttribute("credentialForm") CredentialFormDTO credentialFormDTO,
+            @ModelAttribute("fileForm") FileFormDTO fileFormDTO
     ) {
-        List<NoteFormDTO> noteFormDTOS = noteService.findAllNotesUser(1).stream().map(note -> {
-            return NoteFormDTO.builder()
-                    .noteDescription(note.getNoteDescription())
-                    .noteTitle(note.getNoteTitle())
-                    .noteID(note.getNoteID())
-                    .userID(note.getUserID())
-                    .build();
-        }).collect(Collectors.toList());
-
-        List<CredentialFormDTO> credentialFormDTOS = credentialService.findAllNotesUser(1);
+        int userID = 1;
+        
+        List<NoteFormDTO> noteFormDTOS = noteService.findAllNotesUser(userID);
+        List<CredentialFormDTO> credentialFormDTOS = credentialService.findAllCredentialsUser(userID);
+        List<FileFormDTO> fileFormDTOSDTOS = fileService.findAllUserFiles(userID);
 
         model.addAttribute("notes", noteFormDTOS);
         model.addAttribute("credentials", credentialFormDTOS);
+        model.addAttribute("files", fileFormDTOSDTOS);
         model.addAttribute("encryptionService", encryptionService);
 
         return "home";
