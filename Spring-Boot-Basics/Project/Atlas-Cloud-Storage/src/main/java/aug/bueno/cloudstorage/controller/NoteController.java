@@ -5,11 +5,12 @@ import aug.bueno.cloudstorage.services.NoteService;
 import aug.bueno.cloudstorage.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
-/**
+/*
  * Note
  * <p>
  * - [X] Creation: On successful note creation, the user should be shown a success message and the created note should appear in the list.
@@ -35,25 +36,30 @@ public class NoteController {
     }
 
     @PostMapping()
-    public String insertNewNote(ModelMap model, @ModelAttribute("noteForm") NoteFormDTO noteForm) {
-        LOGGER.info(noteForm.toString());
+    public String insertOrUpdateNote(
+            final Authentication auth,
+            final ModelMap model,
+            @ModelAttribute("noteForm") final NoteFormDTO noteForm
+    ) {
+        LOGGER.info(noteForm.toString(), auth.getName());
 
-        boolean result = noteService.insertOrUpdateNote(noteForm, 1);
+        int userID = userService.findUserByUserName(auth.getName()).get().getUserID();
+
+        boolean result = noteService.insertOrUpdateNote(noteForm, userID);
         return result ? "redirect:/result?isSuccess=" + true : "redirect:/result?error=" + true;
     }
 
     @GetMapping("/delete")
     public String deleteNote(
-            ModelMap model,
-            @ModelAttribute("noteForm") NoteFormDTO noteFormDTO,
-            @RequestParam("id") Integer noteID
+            final ModelMap model,
+            final @ModelAttribute("noteForm") NoteFormDTO noteFormDTO,
+            final @RequestParam("id") Integer noteID
     ) {
         LOGGER.info(noteID.toString());
 
         boolean result = false;
 
         try {
-
             if (noteID > 0) {
                 result = noteService.deleteByNoteID(noteID);
             }

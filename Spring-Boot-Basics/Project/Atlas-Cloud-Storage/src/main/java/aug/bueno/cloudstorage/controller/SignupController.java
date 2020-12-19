@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Optional;
-
-// An error message is already present in the template, but should only be visible if an error occurred during signup.
-
-// The application should not allow duplicate usernames or duplicate filenames attributed to a single user.
+/*
+ * - [X] An error message is already present in the template, but should only be visible if an error occurred during signup.
+ * - [X] The application should not allow duplicate usernames or duplicate filenames attributed to a single user.
+ */
 
 @Controller
 @RequestMapping("/signup")
@@ -28,12 +28,12 @@ public class SignupController {
     }
 
     @GetMapping
-    public String getSignupPage(final @ModelAttribute("signupForm") SignupFormDTO signupForm, final Model model) {
+    public String getSignupPage(@ModelAttribute("signupForm") final SignupFormDTO signupForm, final Model model) {
         return "signup";
     }
 
     @PostMapping
-    public String signupNewUser(final @ModelAttribute("signupForm") SignupFormDTO signupForm, final Model model) {
+    public String signupNewUser(@ModelAttribute("signupForm") final SignupFormDTO signupForm, final Model model) {
 
         Optional<String> invalidResult = this.isSubmittedSignupDataValid(signupForm);
 
@@ -69,7 +69,7 @@ public class SignupController {
         return result;
     }
 
-    private Optional<String> validateIfThereIsDuplicatedUserName(SignupFormDTO signupForm) {
+    private Optional<String> validateIfThereIsDuplicatedUserName(final SignupFormDTO signupForm) {
 
         Optional<User> userByUserName = userService.findUserByUserName(signupForm.getUserName());
 
@@ -80,7 +80,7 @@ public class SignupController {
         return Optional.empty();
     }
 
-    private Optional<String> validateIfRequiredInfoIsPresent(SignupFormDTO signupForm) {
+    private Optional<String> validateIfRequiredInfoIsPresent(final SignupFormDTO signupForm) {
 
         Optional<String> s = Optional.of("There are fields with invalid information, please review your registration");
 

@@ -2,10 +2,12 @@ package aug.bueno.cloudstorage.controller;
 
 import aug.bueno.cloudstorage.dto.FileFormDTO;
 import aug.bueno.cloudstorage.services.FileService;
+import aug.bueno.cloudstorage.services.UserService;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -39,15 +41,21 @@ public class FileController {
     private Logger LOGGER = LoggerFactory.getLogger(NoteController.class);
 
     private FileService fileService;
+    private UserService userService;
 
-    public FileController(FileService fileService) {
+    public FileController(FileService fileService, UserService userService) {
         this.fileService = fileService;
+        this.userService = userService;
     }
 
     @PostMapping(value = "/upload")
-    public String insertNewFile(@RequestParam("fileUpload") MultipartFile file, ModelMap modelMap) {
+    public String insertNewFile(
+            final Authentication auth,
+            final ModelMap modelMap,
+            @RequestParam("fileUpload") final MultipartFile file
+    ) {
 
-        int userID = 1;
+        final int userID = userService.findUserByUserName(auth.getName()).get().getUserID();
         Optional<String> invalidFileToSave = isInvalidFileToSave(file, userID);
 
         if (invalidFileToSave.isPresent()) {
@@ -72,10 +80,13 @@ public class FileController {
     }
 
     @GetMapping("/download/{fileID}")
-    public String downloadFile(@PathVariable Integer fileID, RedirectAttributes redirectAttributes,
-                               HttpServletResponse resp) throws IOException {
+    public String downloadFile(
+            final Authentication auth,
+            @PathVariable final Integer fileID,
+            final RedirectAttributes redirectAttributes,
+            final HttpServletResponse resp) throws IOException {
 
-        int userID = 1;
+        final int userID = userService.findUserByUserName(auth.getName()).get().getUserID();
 
         Optional<FileFormDTO> fileByFileNameAndUserID = fileService.findFileByFileIDAndUserID(fileID, userID);
 
@@ -147,11 +158,12 @@ public class FileController {
 
     @GetMapping("/delete/{fileID}")
     public String deleteFile(
-            ModelMap model,
-            @PathVariable("fileID") Integer fileID
+            final Authentication auth,
+            final ModelMap model,
+            @PathVariable("fileID") final Integer fileID
     ) {
         LOGGER.info(fileID.toString());
-        int userID = 1;
+        final int userID = userService.findUserByUserName(auth.getName()).get().getUserID();
 
         int result = 0;
         try {
@@ -168,7 +180,7 @@ public class FileController {
         }
     }
 
-    private Optional<String> isInvalidFileToSave(MultipartFile file, int userID) {
+    private Optional<String> isInvalidFileToSave(final MultipartFile file, int userID) {
 
         if (file.getSize() == 0) {
             return Optional.of("redirect:/result?errorMessage=" + EMPTY_FILE_MSG);

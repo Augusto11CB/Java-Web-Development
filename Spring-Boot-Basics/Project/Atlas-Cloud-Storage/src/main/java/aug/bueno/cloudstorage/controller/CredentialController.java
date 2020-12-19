@@ -5,11 +5,12 @@ import aug.bueno.cloudstorage.services.CredentialService;
 import aug.bueno.cloudstorage.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
-/**
+/*
  * Credentials
  * <p>
  * - [X] Creation: On successful credential creation, the user should be shown a success message and the created credential should appear in the list.
@@ -35,19 +36,25 @@ public class CredentialController {
     }
 
     @PostMapping()
-    public String insertUpdateNewCredential(ModelMap model, @ModelAttribute("credentialForm") CredentialFormDTO credentialFormDTO) {
+    public String insertOrUpdateNewCredential(
+            final Authentication auth,
+            final ModelMap model,
+            @ModelAttribute("credentialForm") final CredentialFormDTO credentialFormDTO) {
+
         LOGGER.info(credentialFormDTO.toString());
 
-        boolean result = credenialService.insertOrUpdateCredential(credentialFormDTO, 1);
+        int userID = userService.findUserByUserName(auth.getName()).get().getUserID();
+
+        boolean result = credenialService.insertOrUpdateCredential(credentialFormDTO, userID);
 
         return result ? "redirect:/result?isSuccess=" + result : "redirect:/result?error=" + true;
     }
 
     @GetMapping("/delete")
     public String deleteCredential(
-            ModelMap model,
-            @ModelAttribute("credentialForm") CredentialFormDTO credentialFormDTO,
-            @RequestParam("id") Integer credentialID
+            final ModelMap model,
+            final @ModelAttribute("credentialForm") CredentialFormDTO credentialFormDTO,
+            final @RequestParam("id") Integer credentialID
     ) {
         LOGGER.info(credentialID.toString());
 
