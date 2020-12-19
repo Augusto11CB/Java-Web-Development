@@ -104,7 +104,7 @@ public class FileController {
     }
 
     /*
-        // TODO Aks Udacity Knowledge Center about this case
+        // TODO Ask Udacity Knowledge Center about this case
         @GetMapping("/download/{fileID}")
         public ResponseEntity<?> viewFile(@PathVariable Integer fileID, HttpServletResponse response) throws IOException {
             int userID = 1;

@@ -19,6 +19,7 @@ public class GlobalExceptionHandler {
     }
 
 /*
+    TODO Ask about this in Udacity Knowledge Center
     @ExceptionHandler({FileNotFoundException.class})
     @ResponseStatus(value= HttpStatus.NOT_FOUND)
     public String fileNotFoundExceptionHandler(FileNotFoundException e, RedirectAttributes redirectAttributes) {

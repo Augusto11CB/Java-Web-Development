@@ -16,7 +16,6 @@ public interface NoteMapper {
 
     @Select("SELECT * FROM NOTES WHERE notetitle = #{noteTitle} AND userid = #{userID}")
     List<Note> getNoteByTitleAndUserID(String noteTitle, int userID);
-    // TODO - Verify if we can have notes with same title
 
     @Insert("INSERT INTO NOTES (notetitle, notedescription, userid) " +
             "VALUES(#{noteTitle}, #{noteDescription}, #{userID})")

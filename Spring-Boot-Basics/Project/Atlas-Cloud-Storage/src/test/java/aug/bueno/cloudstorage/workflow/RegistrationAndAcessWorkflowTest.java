@@ -1,4 +1,4 @@
-package aug.bueno.cloudstorage;
+package aug.bueno.cloudstorage.workflow;
 
 import aug.bueno.cloudstorage.util.AccessAndRegisterUtils;
 import io.github.bonigarcia.wdm.WebDriverManager;

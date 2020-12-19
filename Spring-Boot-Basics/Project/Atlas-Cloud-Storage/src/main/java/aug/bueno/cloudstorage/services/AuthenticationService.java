@@ -28,8 +28,6 @@ public class AuthenticationService implements AuthenticationProvider {
         final String username = authentication.getName();
         final String password = authentication.getCredentials().toString();
 
-        // TODO - Implement authentication method
-
         final Optional<User> userOp = userMapper.getUserByName(username);
 
         if (userOp.isPresent()) {
