@@ -21,7 +21,7 @@ public class CredentialService {
         this.encryptionService = encryptionService;
     }
 
-    public List<CredentialFormDTO> findAllNotesUser(final int userID) {
+    public List<CredentialFormDTO> findAllCredentialsUser(final int userID) {
         return credentialMapper.getAllCredentialByUser(userID).stream()
                 .map(this::credentialToCredentialFormDTO)
                 .collect(Collectors.toList());

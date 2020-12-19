@@ -46,8 +46,7 @@ public class NoteService {
     }
 
     public boolean deleteByNoteIDAndUserID(final int noteID, final int userID) {
-        noteMapper.deleteByNoteIDAndUserID(noteID, userID);
-        return true;
+        return noteMapper.deleteByNoteIDAndUserID(noteID, userID);
     }
 
     public boolean deleteByNoteID(final int noteID) {

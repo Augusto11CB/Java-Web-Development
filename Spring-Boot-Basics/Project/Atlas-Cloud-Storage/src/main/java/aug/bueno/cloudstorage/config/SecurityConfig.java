@@ -8,7 +8,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
-// You have to restrict unauthorized users from accessing pages other than the login and signup pages
+/*
+ * - [X] You have to restrict unauthorized users from accessing pages other than the login and signup pages
+ */
 
 
 @Configuration
