@@ -22,6 +22,8 @@ public interface CredentialMapper {
     @Delete("DELETE FROM CREDENTIALS WHERE credentialid = #{credentialID}")
     boolean delete(Integer credentialID);
 
+    // TODO DELETE FUNCTIONS RETURNING int
+
     @Delete("DELETE FROM CREDENTIALS WHERE credentialid = #{credentialID} AND userid= #{userID}")
     void deleteByCredentialIDAndUserID(Integer credentialID, Integer userID);
 
