@@ -10,6 +10,14 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
+/*
+ * Access and Registration Test
+ * - [X] Write a Selenium test that verifies that the home page is not accessible without logging in.
+ *
+ * - [X] Write a Selenium test that signs up a new user, logs that user in, verifies that they can access the home page, then logs out and verifies that the home page is no longer accessible.
+ *
+ * */
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class RegistrationAndAcessWorkflowTest {
