@@ -1,3 +1,4 @@
+
 package aug.bueno.cloudstorage.services;
 
 import aug.bueno.cloudstorage.model.User;
@@ -9,6 +10,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 @Service
 public class AuthenticationService implements AuthenticationProvider {
@@ -28,15 +30,16 @@ public class AuthenticationService implements AuthenticationProvider {
 
         // TODO - Implement authentication method
 
-//        final User user = userMapper.getUserByName(username);
-//
-//        if (user != null) {
-//            final String encodedSalt = user.getSalt();
-//            final String hashedPassword = hashService.getHashedValue(password, encodedSalt);
-//            if (user.getPassword().equals(hashedPassword)) {
-//                return new UsernamePasswordAuthenticationToken(username, password, new ArrayList<>());
-//            }
-//        }
+        final Optional<User> userOp = userMapper.getUserByName(username);
+
+        if (userOp.isPresent()) {
+            User user = userOp.get();
+            final String encodedSalt = user.getSalt();
+            final String hashedPassword = hashService.getHashedValue(password, encodedSalt);
+            if (user.getPassword().equals(hashedPassword)) {
+                return new UsernamePasswordAuthenticationToken(username, password, new ArrayList<>());
+            }
+        }
         return null;
     }
 
@@ -45,3 +48,4 @@ public class AuthenticationService implements AuthenticationProvider {
         return authentication.equals(UsernamePasswordAuthenticationToken.class);
     }
 }
+

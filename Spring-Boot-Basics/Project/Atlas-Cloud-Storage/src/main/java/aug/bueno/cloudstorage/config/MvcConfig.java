@@ -9,10 +9,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class MvcConfig implements WebMvcConfigurer {
 
     public void addViewControllers(ViewControllerRegistry registry) {
-        // TODO Se pa da pra remover login e signup em
         registry.addViewController("/login").setViewName("login");
         registry.addViewController("/result").setViewName("result");
-        registry.addViewController("/signup").setViewName("signup");
     }
 
     @Override

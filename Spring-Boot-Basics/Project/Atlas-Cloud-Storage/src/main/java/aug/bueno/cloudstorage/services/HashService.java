@@ -16,11 +16,6 @@ import java.util.Base64;
 public class HashService {
     private Logger logger = LoggerFactory.getLogger(HashService.class);
 
-
-    public String getHashedValue(String data) {
-        return getHashedValue(data, this.getEncodedSalt());
-    }
-
     public String getHashedValue(String data, String salt) {
         byte[] hashedValue = null;
 

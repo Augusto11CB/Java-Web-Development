@@ -1,3 +1,4 @@
+
 package aug.bueno.cloudstorage.config;
 
 import aug.bueno.cloudstorage.services.AuthenticationService;
@@ -7,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
+// You have to restrict unauthorized users from accessing pages other than the login and signup pages
 
 
 @Configuration
@@ -31,7 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated();
 
         http.formLogin()
-                .defaultSuccessUrl("/chat", true);
+                .defaultSuccessUrl("/home", true);
 
         http.formLogin()
                 .loginPage("/login")
@@ -43,3 +45,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     }
 }
+

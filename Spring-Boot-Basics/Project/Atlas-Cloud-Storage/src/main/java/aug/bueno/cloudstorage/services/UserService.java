@@ -21,12 +21,15 @@ public class UserService {
 
     public Optional<User> createUser(final String userName, final String password, final String firstName, final String lastName) {
 
-        final String encodedPassword = hashService.getHashedValue(password);
+
+        final String encodedSalt = hashService.getEncodedSalt();
+        final String encodedPassword = hashService.getHashedValue(password, encodedSalt);
 
         final User user = User.builder()
                 .userName(userName)
                 .password(encodedPassword)
                 .firstName(firstName)
+                .salt(encodedSalt)
                 .lastName(lastName)
                 .build();
 
@@ -40,7 +43,7 @@ public class UserService {
         }
     }
 
-    public Optional<User> findUserByUserName(final String userName){
+    public Optional<User> findUserByUserName(final String userName) {
         return userMapper.getUserByName(userName);
     }
 

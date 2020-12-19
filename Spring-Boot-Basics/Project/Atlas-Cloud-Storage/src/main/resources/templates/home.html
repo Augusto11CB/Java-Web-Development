@@ -11,10 +11,8 @@
 <body class="p-3 mb-2 bg-light text-black">
 <div class="container">
     <div id="logoutDiv">
-        <!-- AUG - Perhaps it will fail because it is a post operation, if fail try with GET -->
-        <!--                <form action="#" th:action="@{/logout}" method="GET">-->
-        <!--                <form action="#" th:action="@{/logout}" method="POST">-->
-        <form action="#" method="POST">
+        <form action="#" th:action="@{/logout}" method="POST">
+
             <button type="submit" class="btn btn-secondary float-right">Logout</button>
         </form>
     </div>
@@ -263,6 +261,8 @@
 
                 $('#credentialModal').modal('show');
             }
+
+
 
 
 

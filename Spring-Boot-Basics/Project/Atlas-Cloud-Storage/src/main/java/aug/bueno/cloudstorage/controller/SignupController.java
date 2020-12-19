@@ -3,13 +3,13 @@ package aug.bueno.cloudstorage.controller;
 import aug.bueno.cloudstorage.dto.SignupFormDTO;
 import aug.bueno.cloudstorage.model.User;
 import aug.bueno.cloudstorage.services.UserService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Optional;
 
@@ -35,7 +35,13 @@ public class SignupController {
     @PostMapping
     public String signupNewUser(final @ModelAttribute("signupForm") SignupFormDTO signupForm, final Model model) {
 
-        if (this.isSubmittedSignupDataValid(signupForm)) {
+        Optional<String> invalidResult = this.isSubmittedSignupDataValid(signupForm);
+
+        if (invalidResult.isPresent()) {
+            model.addAttribute("signupError", invalidResult.get());
+
+        } else {
+
             Optional<User> user = userService.createUser(signupForm.getUserName(), signupForm.getPassword(), signupForm.getFirstName(), signupForm.getLastName());
 
             if (user.isPresent()) {
@@ -43,15 +49,49 @@ public class SignupController {
             } else {
                 model.addAttribute("signupError", "There was an error signing you up. Please try again.");
             }
-        } else {
-            model.addAttribute("signupError", "The username already exists.");
         }
 
         return "signup";
     }
 
-    private boolean isSubmittedSignupDataValid(final SignupFormDTO signupForm) {
-        // TODO - Validate signup form
-        return false;
+    private Optional<String> isSubmittedSignupDataValid(final SignupFormDTO signupForm) {
+
+        Optional<String> result = Optional.empty();
+
+        result = validateIfRequiredInfoIsPresent(signupForm);
+
+        if (result.isPresent()) {
+            return result;
+        }
+
+        result = validateIfThereIsDuplicatedUserName(signupForm);
+
+        return result;
+    }
+
+    private Optional<String> validateIfThereIsDuplicatedUserName(SignupFormDTO signupForm) {
+
+        Optional<User> userByUserName = userService.findUserByUserName(signupForm.getUserName());
+
+        if (userByUserName.isPresent()) {
+            return Optional.of("The username already exists.");
+        }
+
+        return Optional.empty();
+    }
+
+    private Optional<String> validateIfRequiredInfoIsPresent(SignupFormDTO signupForm) {
+
+        Optional<String> s = Optional.of("There are fields with invalid information, please review your registration");
+
+        if (!StringUtils.isNotBlank(signupForm.getUserName()) ||
+                !StringUtils.isNotBlank(signupForm.getPassword()) ||
+                !StringUtils.isNotBlank(signupForm.getFirstName()) ||
+                !StringUtils.isNotBlank(signupForm.getLastName())
+        ) {
+            return s;
+        }
+
+        return Optional.empty();
     }
 }
