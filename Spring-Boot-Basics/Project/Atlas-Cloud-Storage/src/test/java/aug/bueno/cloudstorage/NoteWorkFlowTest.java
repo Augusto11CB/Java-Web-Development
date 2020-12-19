@@ -52,7 +52,7 @@ public class NoteWorkFlowTest {
 
     @Test
     @Order(1)
-    public void testCreateAndDeleteNote() throws InterruptedException {
+    public void testCreateAndDeleteNote() {
 
         Assertions.assertDoesNotThrow(() -> {
             this.driver.findElement(By.xpath("//th[text()='" + DEFAULT_NOTE_TITLE + "']"));
@@ -66,7 +66,7 @@ public class NoteWorkFlowTest {
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", deleteBtn);
 
 
-        this.goToHome();
+        AccessAndRegisterUtils.goToHome(driver, webDriverWait, "nav-notes-tab");
 
         Assertions.assertThrows(NoSuchElementException.class, () -> {
             this.driver.findElement(By.xpath("//th[text()='" + DEFAULT_NOTE_TITLE + "']"));
@@ -76,7 +76,7 @@ public class NoteWorkFlowTest {
 
     @Test
     @Order(2)
-    public void testUpdateNote() throws InterruptedException {
+    public void testUpdateNote() {
 
         final String newNoteTitle = "Pretty Cool Title";
         final String newNoteDesc = "What a nice description";
@@ -104,7 +104,7 @@ public class NoteWorkFlowTest {
         WebElement noteForm = this.driver.findElement(By.id("noteSubmit"));
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", noteForm);
 
-        this.goToHome();
+        AccessAndRegisterUtils.goToHome(driver, webDriverWait, "nav-notes-tab");
 
         Assertions.assertDoesNotThrow(() -> {
             this.driver.findElement(By.xpath("//th[text()='" + newNoteTitle + "']"));
@@ -112,19 +112,7 @@ public class NoteWorkFlowTest {
         });
     }
 
-    private void goToHome() throws InterruptedException {
-
-        Assertions.assertEquals("Result", driver.getTitle());
-        WebElement backToHomeBtn = this.driver.findElement(By.id("home-link"));
-        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", backToHomeBtn);
-
-        this.webDriverWait.until(ExpectedConditions.titleContains("Home"));
-        Assertions.assertEquals("Home", driver.getTitle());
-        WebElement notesTab = this.driver.findElement(By.id("nav-notes-tab"));
-        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", notesTab);
-    }
-
-    private void insertNewNote() throws InterruptedException {
+    private void insertNewNote() {
 
         this.driver.get("http://localhost:" + this.port + "/home");
 
@@ -147,7 +135,7 @@ public class NoteWorkFlowTest {
         WebElement noteSubmitElement = this.driver.findElement(By.id("noteSubmit"));
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", noteSubmitElement);
 
-        this.goToHome();
+        AccessAndRegisterUtils.goToHome(driver, webDriverWait, "nav-notes-tab");
     }
 
 

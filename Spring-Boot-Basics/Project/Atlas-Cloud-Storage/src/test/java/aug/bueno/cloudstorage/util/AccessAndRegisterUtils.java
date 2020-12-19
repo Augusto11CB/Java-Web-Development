@@ -2,10 +2,12 @@ package aug.bueno.cloudstorage.util;
 
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class AccessAndRegisterUtils {
 
-    public static void loginUser(WebDriver driver, int port, String password, String userName) {
+    public static void loginUser(final WebDriver driver, final int port, final String password, final String userName) {
 
         driver.get("http://localhost:" + port + "/login");
 
@@ -23,7 +25,7 @@ public class AccessAndRegisterUtils {
 
     }
 
-    public static void signupUser(WebDriver driver, int port, String password, String userName) {
+    public static void signupUser(final WebDriver driver, final int port, final String password, final String userName) {
 
         driver.get("http://localhost:" + port + "/signup");
 
@@ -44,5 +46,17 @@ public class AccessAndRegisterUtils {
         Assertions.assertEquals("Sign Up", submitButton.getText());
         ((JavascriptExecutor) driver)
                 .executeScript("arguments[0].click();", submitButton);
+    }
+
+    public static void goToHome(final WebDriver driver, final WebDriverWait webDriverWait, final String tabToGo) {
+
+        Assertions.assertEquals("Result", driver.getTitle());
+        WebElement backToHomeBtn = driver.findElement(By.id("home-link"));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", backToHomeBtn);
+
+        webDriverWait.until(ExpectedConditions.titleContains("Home"));
+        Assertions.assertEquals("Home", driver.getTitle());
+        WebElement notesTab = driver.findElement(By.id(tabToGo));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", notesTab);
     }
 }
