@@ -12,6 +12,9 @@
 <div class="container justify-content-center w-25 p-3" style="background-color: #eeeeee; margin-top: 5em;">
     <h1 class="display-5">Login</h1>
     <form action="#" th:action="@{/login}" method="POST">
+        <!--Another interesting fact-->
+        <!--Notice that these div section for displaying success logout our error messages are inside the form-->
+        <!--I thought that it would be outside the form -->
         <div id="error-msg" th:if="${param.error}" class="alert alert-danger">
             Invalid username or password
         </div>
@@ -20,6 +23,10 @@
         </div>
         <div class="form-group">
             <label for="inputUsername">Username</label>
+            <!--Thymeleaf info -->
+            <!--It is interesting that we don't need to set any thymeleaf attribute in order to get 'username' and 'password-->
+            <!--When we are going to validate those info in the backend, the service AuthenticationService autowires-->
+            <!--org.springframework.security.core.Authentication and this last one has access to 'username' and 'password-->
             <input type="input" class="form-control" name="username" id="inputUsername" placeholder="Enter Username"
                    maxlength="20" required>
         </div>
