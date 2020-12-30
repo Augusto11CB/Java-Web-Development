@@ -12,7 +12,7 @@
 	<artifactId>c1.l3.chat.app</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Chat App</name>
-	<description>Basic Really Simple Chat App </description>
+	<description>Basic Really Simple Chat App</description>
 
 	<properties>
 		<java.version>15</java.version>
