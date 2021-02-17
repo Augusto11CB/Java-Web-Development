@@ -306,7 +306,8 @@ public class Person {
 ```
 
 ### `@ElementCollection` - Association Between a Single Entity and Non-Entity values
-Use the `@ElementCollection` annotation to denote an association between a single Entity and a list of values that are not themselves Entities. 
+Use the `@ElementCollection` annotation to denote an association between a single Entity and a list of values that are not themselves Entities. All the records of the collection are stored in a separate table. The configuration for this table is specified using the `@CollectionTable` annotation.
+
 This annotation allows the persistance of Embeddables or enums, for example. **These embeddables will be stored in a separate table, along with the id of the Entity** in which they are contained.
 
 **Example 1**
@@ -477,7 +478,7 @@ Data structures designed to represent the needs of the front end.
 -   Simplify and document interaction between front end and Controller.
 - The DTO objets shoud not be referenced outside the controller classes. They only define data format specific to the endpoints provided by the controller.
 - Any exchanges with the service layer will envolving transforming the data between the entity and the DTO
-	- Recommendation: Translation between DTO and entity happens inside the controller layer
+	- **Recommendation: Translation between DTO and entity happens inside the controller layer**
 -   Conceal database structures.
 -   Limit the amount of data exchanged.
 -   Customize display data to meet the needs of the front end.
@@ -506,7 +507,7 @@ Annotation that filters which Entity data is visible to the Presentation layer.
 ### Example
 Create a REST endpoint that allows users to retrieve the price for a plant with a specific name, but without show them ids or any information about the Delivery that plant is scheduled for.
 
-```
+```java
 @RestController
 @RequestMapping("/plant")
 public class PlantController {
@@ -527,13 +528,13 @@ public class PlantController {
 }
 ```
 
-```
+```java
 public class Views {
     public interface Public {}
 }
 ```
 
-```
+```java
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Plant {
